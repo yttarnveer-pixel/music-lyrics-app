@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Lyrics</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090909;color:white;
+ font-family:Arial,sans-serif;padding:22px;
+}
+header{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:bold}
+.logo span{color:#c49bff}
+.search{
+ width:100%;padding:15px;border-radius:14px;
+ background:#1c1c1c;color:white;border:1px solid #333;
+ margin:25px 0;font-size:15px;
+}
+h2{font-size:21px}
+.song{
+ background:#191919;padding:14px;border-radius:16px;
+ margin:13px 0;display:flex;align-items:center;gap:14px;
+}
+.cover{
+ width:65px;height:65px;border-radius:12px;
+ background:linear-gradient(135deg,#563c76,#bd83a9);
+ display:flex;align-items:center;justify-content:center;
+ font-size:27px;
+}
+.info{flex:1}
+.info h3{margin:0 0 7px;font-size:16px}
+.info p{margin:0;color:#aaa;font-size:13px}
+button{
+ background:#b68cff;color:#120c19;border:0;
+ padding:11px 17px;border-radius:20px;font-weight:bold;
+}
+.lyrics{
+ background:#191919;padding:22px;border-radius:18px;
+ text-align:center;margin-top:25px;
+}
+.lyrics p{color:#ccc;line-height:2;font-size:16px}
+.nav{display:flex;justify-content:space-around;margin-top:30px;color:#aaa}
+.active{color:#c49bff}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">MUSIC<span>LYRICS</span></div>
+ <div>♡</div>
+</header>
+
+<input class="search" id="search" placeholder="Search your favourite song...">
+
+<h2>Popular Songs</h2>
+<div id="songs"></div>
+
+<div class="lyrics">
+ <h2 id="songTitle">Select a Song</h2>
+ <p id="artist">Your favourite lyrics here</p>
+ <hr style="border-color:#333">
+ <p id="lyricText">Choose a song from the list above to see its lyrics.</p>
+</div>
+
+<div class="nav">
+ <span class="active">Home</span>
+ <span>Search</span>
+ <span>Library</span>
+ <span>Profile</span>
+</div>
+
+<script>
+const data=[
+ {name:"Perfect",artist:"Ed Sheeran",lyrics:"I found a love for me\nDarling just dive right in\nAnd follow my lead"},
+ {name:"Night Changes",artist:"One Direction",lyrics:"Going out tonight\nChanges into something red\nHer mother doesn't like that kind of dress"},
+ {name:"Let Me Down Slowly",artist:"Alec Benjamin",lyrics:"This night is cold in the kingdom\nI can feel you fade away"},
+ {name:"Memories",artist:"Maroon 5",lyrics:"Here's to the ones that we got\nCheers to the wish you were here"}
+];
+
+function showSongs(list){
+ document.getElementById("songs").innerHTML=list.map((s,i)=>`
+ <div class="song">
+ <div class="cover">♫</div>
+ <div class="info">
+ <h3>${s.name}</h3>
+ <p>${s.artist}</p>
+ </div>
+ <button onclick="showLyrics('${s.name}')">View</button>
+ </div>`).join("");
+}
+
+function showLyrics(name){
+ const s=data.find(x=>x.name===name);
+ if(!s)return;
+ document.getElementById("songTitle").innerText=s.name;
+ document.getElementById("artist").innerText=s.artist;
+ document.getElementById("lyricText").innerText=s.lyrics;
+}
+
+document.getElementById("search").addEventListener("input",e=>{
+ const q=e.target.value.toLowerCase();
+ showSongs(data.filter(s=>
+ s.name.toLowerCase().includes(q)||
+ s.artist.toLowerCase().includes(q)
+ ));
+});
+
+showSongs(data);
+</script>
+</body>
+</html>
