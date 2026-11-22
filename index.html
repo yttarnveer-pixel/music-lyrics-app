@@ -3,112 +3,151 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music Lyrics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>Punjabi Music</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;background:#090909;color:white;
- font-family:Arial,sans-serif;padding:22px;
-}
+body{margin:0;background:#090909;color:white;font-family:Arial;padding:20px;padding-bottom:90px}
 header{display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:bold}
-.logo span{color:#c49bff}
-.search{
- width:100%;padding:15px;border-radius:14px;
- background:#1c1c1c;color:white;border:1px solid #333;
- margin:25px 0;font-size:15px;
-}
-h2{font-size:21px}
-.song{
- background:#191919;padding:14px;border-radius:16px;
- margin:13px 0;display:flex;align-items:center;gap:14px;
-}
-.cover{
- width:65px;height:65px;border-radius:12px;
- background:linear-gradient(135deg,#563c76,#bd83a9);
- display:flex;align-items:center;justify-content:center;
- font-size:27px;
-}
-.info{flex:1}
-.info h3{margin:0 0 7px;font-size:16px}
-.info p{margin:0;color:#aaa;font-size:13px}
-button{
- background:#b68cff;color:#120c19;border:0;
- padding:11px 17px;border-radius:20px;font-weight:bold;
-}
-.lyrics{
- background:#191919;padding:22px;border-radius:18px;
- text-align:center;margin-top:25px;
-}
-.lyrics p{color:#ccc;line-height:2;font-size:16px}
-.nav{display:flex;justify-content:space-around;margin-top:30px;color:#aaa}
-.active{color:#c49bff}
+.logo{font-size:23px;font-weight:900;letter-spacing:-1px}
+.logo span{color:#bb91ff}
+.tag{color:#aaa;font-size:12px;margin-top:5px}
+.search{width:100%;padding:16px;background:#1c1c1c;border:1px solid #333;border-radius:13px;color:white;font-size:15px;margin:25px 0}
+h2{font-size:20px}
+.tabs{display:flex;gap:10px;margin:20px 0;overflow:auto}
+.tabs button{background:#222;color:#aaa;padding:11px 17px;border-radius:22px;white-space:nowrap}
+.tabs button.active{background:#bb91ff;color:#111}
+button{border:0;cursor:pointer}
+.song{display:flex;align-items:center;gap:13px;padding:13px;background:#181818;border-radius:15px;margin:12px 0}
+.cover{height:65px;width:65px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg,#37234d,#a16bb5);display:flex;align-items:center;justify-content:center;font-size:27px}
+.info{flex:1;min-width:0}
+.info h3{font-size:15px;margin:0 0 7px}
+.info p{font-size:12px;color:#aaa;margin:0}
+.view{background:#bb91ff;color:#111;padding:10px 13px;border-radius:20px;font-weight:bold}
+.section{margin-top:25px}
+.card{background:#191919;padding:20px;border-radius:17px;margin-top:15px}
+#details{text-align:center;line-height:1.8}
+#details button{background:#bb91ff;padding:12px 20px;border-radius:20px;margin-top:12px}
+.nav{position:fixed;bottom:0;left:0;width:100%;background:#151515;display:flex;justify-content:space-around;padding:17px 5px;color:#aaa;border-top:1px solid #333}
+.nav span{font-size:12px;cursor:pointer}
+.nav .selected{color:#bb91ff}
+.empty{text-align:center;color:#aaa;padding:30px}
 </style>
 </head>
 <body>
 
 <header>
- <div class="logo">MUSIC<span>LYRICS</span></div>
- <div>♡</div>
+ <div>
+  <div class="logo">PUNJABI<span>MUSIC</span></div>
+  <div class="tag">Your Punjabi Music World ♫</div>
+ </div>
+ <div style="font-size:26px">♡</div>
 </header>
 
-<input class="search" id="search" placeholder="Search your favourite song...">
+<input id="search" class="search" placeholder="Search Punjabi songs or singers...">
 
-<h2>Popular Songs</h2>
-<div id="songs"></div>
+<div class="section">
+ <h2>Discover Punjabi Music</h2>
+ <div class="tabs">
+  <button class="active" onclick="filter('all',this)">All Songs</button>
+  <button onclick="filter('AP Dhillon',this)">AP Dhillon</button>
+  <button onclick="filter('Sidhu Moose Wala',this)">Sidhu Moose Wala</button>
+  <button onclick="filter('Diljit Dosanjh',this)">Diljit Dosanjh</button>
+ </div>
+</div>
 
-<div class="lyrics">
- <h2 id="songTitle">Select a Song</h2>
- <p id="artist">Your favourite lyrics here</p>
- <hr style="border-color:#333">
- <p id="lyricText">Choose a song from the list above to see its lyrics.</p>
+<div class="section">
+ <h2 id="heading">Popular Punjabi Songs</h2>
+ <div id="songs"></div>
+</div>
+
+<div class="card" id="details">
+ <h2>Select Your Song</h2>
+ <p style="color:#aaa">Choose a song to see its details.</p>
 </div>
 
 <div class="nav">
- <span class="active">Home</span>
- <span>Search</span>
- <span>Library</span>
- <span>Profile</span>
+ <span class="selected" onclick="filter('all')">⌂<br>Home</span>
+ <span onclick="document.getElementById('search').focus()">⌕<br>Search</span>
+ <span onclick="showFav()">♡<br>Favourites</span>
 </div>
 
 <script>
 const data=[
- {name:"Perfect",artist:"Ed Sheeran",lyrics:"I found a love for me\nDarling just dive right in\nAnd follow my lead"},
- {name:"Night Changes",artist:"One Direction",lyrics:"Going out tonight\nChanges into something red\nHer mother doesn't like that kind of dress"},
- {name:"Let Me Down Slowly",artist:"Alec Benjamin",lyrics:"This night is cold in the kingdom\nI can feel you fade away"},
- {name:"Memories",artist:"Maroon 5",lyrics:"Here's to the ones that we got\nCheers to the wish you were here"}
+{name:"Excuses",artist:"AP Dhillon"},
+{name:"Brown Munde",artist:"AP Dhillon"},
+{name:"Insane",artist:"AP Dhillon"},
+{name:"With You",artist:"AP Dhillon"},
+{name:"295",artist:"Sidhu Moose Wala"},
+{name:"So High",artist:"Sidhu Moose Wala"},
+{name:"The Last Ride",artist:"Sidhu Moose Wala"},
+{name:"Legend",artist:"Sidhu Moose Wala"},
+{name:"Born to Shine",artist:"Diljit Dosanjh"},
+{name:"GOAT",artist:"Diljit Dosanjh"},
+{name:"Lover",artist:"Diljit Dosanjh"},
+{name:"Hass Hass",artist:"Diljit Dosanjh"}
 ];
 
-function showSongs(list){
- document.getElementById("songs").innerHTML=list.map((s,i)=>`
+let current="all";
+let favourites=[];
+
+function render(list){
+ const box=document.getElementById("songs");
+ if(!list.length){
+ box.innerHTML='<div class="empty">No songs found</div>';
+ return;
+ }
+ box.innerHTML=list.map((s,i)=>`
  <div class="song">
  <div class="cover">♫</div>
  <div class="info">
  <h3>${s.name}</h3>
  <p>${s.artist}</p>
  </div>
- <button onclick="showLyrics('${s.name}')">View</button>
+ <button class="view" onclick="details('${s.name}')">View</button>
  </div>`).join("");
 }
 
-function showLyrics(name){
+function details(name){
  const s=data.find(x=>x.name===name);
- if(!s)return;
- document.getElementById("songTitle").innerText=s.name;
- document.getElementById("artist").innerText=s.artist;
- document.getElementById("lyricText").innerText=s.lyrics;
+ document.getElementById("details").innerHTML=`
+ <div style="font-size:55px">♫</div>
+ <h2>${s.name}</h2>
+ <p style="color:#aaa">${s.artist}</p>
+ <p>Punjabi Song</p>
+ <button onclick="favourite('${s.name}')">♡ Add to Favourites</button>
+ <p style="font-size:12px;color:#aaa">Lyrics and audio will be added through licensed sources.</p>
+ `;
+}
+
+function favourite(name){
+ if(!favourites.includes(name))favourites.push(name);
+ alert("Added to favourites!");
+}
+
+function filter(artist,btn){
+ current=artist;
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ document.getElementById("heading").innerText=artist==="all"?"Popular Punjabi Songs":artist;
+ render(artist==="all"?data:data.filter(s=>s.artist===artist));
+}
+
+function showFav(){
+ render(data.filter(s=>favourites.includes(s.name)));
+ document.getElementById("heading").innerText="Your Favourites";
 }
 
 document.getElementById("search").addEventListener("input",e=>{
  const q=e.target.value.toLowerCase();
- showSongs(data.filter(s=>
+ render(data.filter(s=>
  s.name.toLowerCase().includes(q)||
  s.artist.toLowerCase().includes(q)
  ));
 });
 
-showSongs(data);
+render(data);
 </script>
 </body>
 </html>
